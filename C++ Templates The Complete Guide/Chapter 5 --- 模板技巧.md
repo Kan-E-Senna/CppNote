@@ -148,4 +148,44 @@ int x[] = {0, 8, 15};                 // define forward-declared array
 
 （不过这一部分可能有坑存在，书上这一块写得很简略，需要往后看到更多细节。）
 
-（未完成）
+## 变量模板
+
+我们可以这样来使用模板：
+
+```c++
+template <typename T>
+constexpr T pi = T{3.1415926535897};
+
+auto pi1{ pi<float> };
+auto pi2{ pi<double> };
+auto pi3{ pi<long double> };
+```
+
+可以得知，std::is_same_v, std:is_const_v等等都是这种变量模板。关于变量模板的更多实例需要看到书的后面。
+
+## 对模板参数使用模板
+
+我们有的时候有这样的需求，就是我们的模板参数也需要模板参数。譬如说，我们想实现一个自己的stack，除了需要一个typename T用来标明元素类型以外，我们还需要一个typename Container用来标明容器类型，因为stack可以用数组或者链表来实现。但是Container自己也需要接受模板参数。直接使用下面的写法会报错：
+
+```c++
+template<typename T, typename Container>
+class Stack{
+private:
+    Container<T> cont; // ERROR
+    //...
+};
+```
+
+正确的写法是对Container再使用template，如下：
+
+```c++
+template<typename T, template<typename Ele> class Container>
+class Stack{
+private:
+    Container<T> cont; // OK
+    //...
+};
+```
+
+注意一点，这里我们用的是class，在C++17之前的版本都必须用class才是正确的，c++17之后可以把class换成typename。
+
