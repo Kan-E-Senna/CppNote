@@ -1,5 +1,11 @@
 # std中的排序
 
+## 头文件
+
+```c++
+#include <algorithm>
+```
+
 ## sort
 
 ```c++
